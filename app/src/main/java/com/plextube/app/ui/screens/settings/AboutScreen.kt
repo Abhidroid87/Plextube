@@ -28,6 +28,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.plextube.app.BuildConfig
 import com.plextube.app.R
 import com.plextube.app.ui.components.layout.topbar.FlowTopBar
 import kotlinx.coroutines.Dispatchers
