@@ -48,7 +48,7 @@ It is not a finished product identity file; it is an app foundation you can adap
 - Synchronized lyrics display
 - Fetches tracks from YouTube Music
 
-### Recommendations (FlowNeuro Engine)
+### Recommendations (PlexNeuro Engine)
 - Runs 100% on-device — no server, no telemetry, no account needed
 - Learns from what you watch, skip, like, dislike, search for, and how long you watch
 - Distinguishes weekday and weekend patterns, morning and night preferences
@@ -79,91 +79,6 @@ It is not a finished product identity file; it is an app foundation you can adap
 
 ---
 
-## Screenshots
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center"><b>Home Feed</b><br><img src="Assets/Home.jpeg" width="240"></td>
-      <td align="center"><b>Video Player</b><br><img src="Assets/VideoPlayer.jpeg" width="240"></td>
-      <td align="center"><b>Personality Screen</b><br><img src="Assets/Personality.jpeg" width="240"></td>
-    </tr>
-    <tr>
-      <td align="center"><b>Music Player</b><br><img src="Assets/MusicPlayer.jpeg" width="240"></td>
-      <td align="center"><b>Music Hub</b><br><img src="Assets/Music.jpeg" width="240"></td>
-      <td align="center"><b>Your Library</b><br><img src="Assets/Library.jpeg" width="240"></td>
-    </tr>
-    <tr>
-      <td align="center"><b>Shorts</b><br><img src="Assets/Shorts.jpeg" width="240"></td>
-      <td align="center"><b>Subscriptions</b><br><img src="Assets/Subscriptions.jpeg" width="240"></td>
-      <td align="center"><b>Channel View</b><br><img src="Assets/Channel.jpeg" width="240"></td>
-    </tr>
-    <tr>
-      <td align="center"><b>Artist Page</b><br><img src="Assets/Artist.jpeg" width="240"></td>
-      <td align="center"></td>
-      <td align="center"></td>
-    </tr>
-  </table>
-</div>
-
----
-## Download
-
-### Stable Release
-
-<div align="center">
-  <table border="0">
-    <tr>
-      <td align="center" style="vertical-align: middle; padding: 10px;">
-        <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Abhidroid87/Plextube/">
-          <img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png" alt="Obtainium" height="60">
-        </a>
-      </td>
-      <td align="center" style="vertical-align: middle; padding: 10px;">
-        <a href="https://github.com/Abhidroid87/Plextube/releases/latest">
-          <img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="GitHub" height="90">
-        </a>
-      </td>
-      <td align="center" style="vertical-align: middle; padding: 10px;">
-        <a href="https://github.com/Abhidroid87/Plextube/releases/latest">
-          <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="IzzyOnDroid" height="90">
-        </a>
-      </td>
-    </tr>
-  </table>
-</div>
-
-### Nightly / Debug Build
-> ⚠️ Nightly builds are unstable and may contain bugs. Use at your own risk.
-
-<div align="center">
-  <a href="https://nightly.link/Abhidroid87/Plextube/workflows/build/main/plextube-nightly-apk.zip">
-    <img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="Download from GitHub" height="75">
-  </a>
-  <p><b>No GitHub account required</b> — powered by <a href="https://nightly.link">nightly.link</a></p>
-</div>
-
-### Publishing a Release
-
-Releases are created automatically when a `v*` tag is pushed. For the first
-release, configure these repository secrets in GitHub Actions before tagging:
-
-- `RELEASE_KEYSTORE_BASE64`
-- `RELEASE_CERT_SHA256`
-- `STORE_PASSWORD`
-- `KEY_ALIAS`
-- `KEY_PASSWORD`
-
-Then publish the first release with:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-The workflow builds the signed universal and ABI-specific APKs, generates
-`checksums.txt`, and attaches them to the Plextube GitHub Release.
-
 ### Requirements 
 **Minimum Requirement:** Android 8.0+
 <a id="cert"></a>
@@ -175,41 +90,14 @@ To ensure the authenticity of the APK and verify it has not been tampered with, 
 
 ---
 
-<a id="support--donations"></a>
-## 💰 Support Development
-
-Flow is a free and open-source project. As an independent developer without traditional banking access, keeping this project alive relies entirely on community support. 
-
-**You can now easily support the project using a Credit Card, Apple Pay, or PayPal via Patreon!** (You can choose to support monthly, or just leave a simple one-time tip in the shop).
-
-<a href="https://patreon.com/A_EDev" target="_blank" rel="noreferrer noopener">
-  <img src="https://img.shields.io/badge/Patreon-Support_Flow-FF424D?style=for-the-badge&amp;logo=patreon&amp;logoColor=white" alt="Support Flow on Patreon">
-</a>
-
-<br>
-
-**Prefer to send Crypto directly?**
-If you already use crypto, you can send it directly to my wallets below:
-
-| Coin | Network | Address |
-| :--- | :--- | :--- |
-| **USDT** | TRC20 (Tron) | `TRz7VDrTWwCLCfQmYBEJakqcZgbFNWfUMP` |
-| **Bitcoin** | BTC | `bc1qgmkkxxvzvsymtpfazqfl93jw6k4jgy0xmrtnv8` |
-| **Ethereum** | ERC-20 | `0xfbac6f464fec7fe458e318971a42ba45b305b70e` |
-| **Solana** | SOL | `7b3SLgiVPb8qQUvERSPGRWoFoiGEDvkFuY98M1GEngug` |
-| **Monero** | XMR | `8AgaxZnpEvT8VXJpczpL7BQejwSEw97saJmKYqq4zKErbe9bkYSwUhJ813msPPbdYhF11oz4N7tfEj4Zi6k27fKD83ca1if` |
-
-*Your support helps me maintain the project and add amazing new features!*
-
----
 
 ## 🙏 Acknowledgments
 
-Flow stands on the shoulders of giants. Special thanks to:
+Plextube stands on the shoulders of giants. Special thanks to:
 
 *   **[NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor):** The backbone of our data extraction.
 *   **[NewPipe](https://github.com/TeamNewPipe/NewPipe):** For inspiration from their solid foundation for YouTube data handling.
-*   **[PipePipe](https://codeberg.org/NullPointerException/PipePipe):** For their SABR and InnerTube playback implementation, which guided Flow's YouTube streaming pipeline.
+*   **[PipePipe](https://codeberg.org/NullPointerException/PipePipe):** For their SABR and InnerTube playback implementation, which guided Plex YouTube streaming pipeline.
 *   **[PipePipe Developer Docs](https://priveetee.github.io/Docs-PipePipe/):** For their reference documentation on SABR, BotGuard/PoToken attestation, and InnerTube extraction internals.
 *   **[MetroList](https://github.com/MetrolistGroup/Metrolist):** Inspiration for the Hybrid Music fetching approach, Lyrics handling and some icons design references.
 *   **[LibreTube](https://github.com/LibreTube/LibreTube):** Inspiration for SponsorBlock and DeArrow handling and some icons design references.
@@ -223,7 +111,7 @@ Flow stands on the shoulders of giants. Special thanks to:
 
 <a id="translate"></a>
 ## Translations
-Help translate Flow into your language! 
+Help translate PlexTube into your language! 
 
 [![Translation status](https://hosted.weblate.org/widget/flow/strings/287x66-grey.png)](https://hosted.weblate.org/engage/flow/)
 
@@ -231,31 +119,3 @@ Help translate Flow into your language!
 </div>
 
 ---
-
-## 📄 License & Copyright
-
-**Flow** is Free Software: You can use, study, share, and improve it at your will.
-It is distributed under the **GNU General Public License v3 (GPLv3)**.
-
-**Copyright © 2025-2026 A-EDev**
-
-> 🚨 **For Developers:**
-> This license requires that any project using Flow's source code (including the `FlowNeuroEngine` algorithm) must also be **Open Source** under the GPLv3 license. You may not use this code in a proprietary or closed-source application.
-
----
-
-## Star History
-
-<a href="https://star-history.dera.page/#A-EDev/Flow&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=A-EDev/Flow&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=A-EDev/Flow&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=A-EDev/Flow&type=date&legend=top-left" />
- </picture>
-</a>
-
----
-
-<div align="center">
-  <sub>Made with ❤️ by A-EDev</sub>
-</div>

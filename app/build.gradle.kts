@@ -11,6 +11,29 @@ plugins {
     alias(libs.plugins.room)
 }
 
+val gitRemoteUrl = providers.exec {
+    commandLine("git", "config", "--get", "remote.origin.url")
+}.standardOutput.asText.getOrElse("").trim()
+
+val githubRepoFromGit = gitRemoteUrl
+    .removeSuffix(".git")
+    .let { url ->
+        val withoutProtocol = url
+            .replace(Regex("^https?://github\\.com/"), "")
+            .replace(Regex("^git@github\\.com:"), "")
+            .replace(Regex("^ssh://git@github\\.com/"), "")
+            .replace(Regex("^git@github\\.com/"), "")
+        val parts = withoutProtocol.split('/').filter { it.isNotBlank() }
+        if (parts.size >= 2) {
+            "${parts[0]}/${parts[1]}"
+        } else {
+            "owner/repo"
+        }
+    }
+
+val githubOwner = githubRepoFromGit.substringBefore('/')
+val githubRepo = githubRepoFromGit.substringAfter('/').ifEmpty { "repo" }
+
 android {
     namespace = "com.plextube.app"
     compileSdk = 37
@@ -21,6 +44,11 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
+
+        buildConfigField("String", "GITHUB_REPO", "\"$githubRepoFromGit\"")
+        buildConfigField("String", "GITHUB_REPO_URL", "\"https://github.com/$githubRepoFromGit\"")
+        buildConfigField("String", "GITHUB_RELEASES_URL", "\"https://github.com/$githubRepoFromGit/releases\"")
+        buildConfigField("String", "GITHUB_OWNER_URL", "\"https://github.com/$githubOwner\"")
 
         testInstrumentationRunner = "com.plextube.app.HiltTestRunner"
         vectorDrawables {

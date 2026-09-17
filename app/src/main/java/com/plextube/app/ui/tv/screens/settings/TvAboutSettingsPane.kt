@@ -41,13 +41,13 @@ import com.plextube.app.ui.tv.components.TvNavRow
 import com.plextube.app.ui.tv.components.TvSectionHeader
 import com.plextube.app.ui.tv.focus.ProvideTvColumnPivot
 
-private const val FLOW_WEBSITE_URL = "https://flow.aedev.me"
-private const val FLOW_RELEASES_URL = "https://github.com/A-EDev/Flow/releases"
-private const val FLOW_GITHUB_URL = "https://github.com/A-EDev/Flow"
-private const val FLOW_REDDIT_URL = "https://www.reddit.com/r/Flow_Official/"
-private const val FLOW_CREATOR_URL = "https://github.com/A-EDev"
-private const val FLOW_DONATION_URL = "https://patreon.com/A_EDev"
-private const val FLOW_LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html"
+private val FLOW_WEBSITE_URL = BuildConfig.GITHUB_REPO_URL
+private val FLOW_RELEASES_URL = BuildConfig.GITHUB_RELEASES_URL
+private val FLOW_GITHUB_URL = BuildConfig.GITHUB_REPO_URL
+private val FLOW_REDDIT_URL = BuildConfig.GITHUB_REPO_URL
+private val FLOW_CREATOR_URL = BuildConfig.GITHUB_OWNER_URL
+private val FLOW_DONATION_URL = BuildConfig.GITHUB_REPO_URL
+private val FLOW_LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html"
 private const val NEWPIPE_EXTRACTOR_URL = "https://github.com/TeamNewPipe/NewPipeExtractor"
 
 /** TV counterpart of the mobile About screen, adapted for remote focus and scrolling. */

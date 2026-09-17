@@ -211,7 +211,7 @@ fun AboutScreen(
                     iconPainter = painterResource(id = R.drawable.ic_github),
                     title = stringResource(R.string.github_label),
                     subtitle = stringResource(R.string.github_subtitle),
-                    onClick = { openUrl(context, "https://github.com/A-EDev/flow") },
+                    onClick = { openUrl(context, BuildConfig.GITHUB_REPO_URL) },
                 )
             }
             item { AboutRowDivider() }

@@ -27,10 +27,9 @@ internal data class ReleaseAsset(
 object UpdateManager {
     private val client: OkHttpClient
         get() = AppProxyManager.applyTo(OkHttpClient.Builder()).build()
-    
-    // 🔥 CHANGE THIS TO YOUR REPO: "owner/repo"
-    private const val GITHUB_REPO = "A-EDev/Flow" 
-    private const val API_URL = "https://api.github.com/repos/$GITHUB_REPO/releases/latest"
+
+    private val GITHUB_REPO: String = BuildConfig.GITHUB_REPO
+    private val API_URL: String = "https://api.github.com/repos/$GITHUB_REPO/releases/latest"
 
     suspend fun checkForUpdate(currentVersionName: String): UpdateInfo? = withContext(Dispatchers.IO) {
         try {
