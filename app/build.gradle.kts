@@ -19,8 +19,8 @@ android {
         applicationId = "com.plextube.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 18
-        versionName = "2.2.1"
+        versionCode = 1
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "com.plextube.app.HiltTestRunner"
         vectorDrawables {

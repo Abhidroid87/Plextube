@@ -1,8 +1,8 @@
-# Flow v2.2.1
+# Plextube v1.0.0
 
-**Release date:** 2026-08-28
+**Release date:** 2026-09-17
 
-Enjoying Flow? Consider supporting its development on [Patreon](https://patreon.com/A_EDev) to help keep the app free, open source, ad-free, and improving!
+This is the first Plextube release. The project is still under active development, so expect rough edges and breaking changes while the app continues to evolve.
 
 ## New features
 

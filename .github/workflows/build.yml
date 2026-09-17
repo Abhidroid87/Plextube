@@ -19,10 +19,10 @@ permissions:
   contents: read
 
 env:
-  # Certificate of the official Flow release key. IzzyOnDroid and every
-  # installed client pin this value; an APK signed with anything else cannot
-  # be installed as an update. Changing it forces every user to reinstall.
-  EXPECTED_SIGNER_SHA256: 4322294ed4caa2d4294140095818080ffe8acc1fbe3cdc76107df45c5286be40
+  # Installed clients pin this value; an APK signed with anything else cannot
+  # be installed as an update. Set it to the SHA-256 certificate fingerprint
+  # for the keystore stored in RELEASE_KEYSTORE_BASE64.
+  EXPECTED_SIGNER_SHA256: ${{ secrets.RELEASE_CERT_SHA256 }}
 
 jobs:
   build:
@@ -71,9 +71,10 @@ jobs:
             echo "::error::RELEASE_KEYSTORE_BASE64 is unavailable for a tag build. Refusing to publish unsigned APKs."
             exit 1
           else
-            echo "signed=false" >> "$GITHUB_OUTPUT"
-            echo "Release keystore secret is not available. Continuing with an unsigned CI build."
-          fi
+            # Installed clients pin this value; an APK signed with anything else cannot
+            # be installed as an update. Set it to the SHA-256 certificate fingerprint
+            # for the keystore stored in RELEASE_KEYSTORE_BASE64.
+            EXPECTED_SIGNER_SHA256: ${{ secrets.RELEASE_CERT_SHA256 }}
 
       - name: Run unit tests
         run: >
@@ -199,7 +200,7 @@ jobs:
       - name: Upload GitHub universal APK
         uses: actions/upload-artifact@v7
         with:
-          name: flow-github-universal-release-apk
+          name: plextube-github-universal-release-apk
           path: app/build/outputs/apk/github/release/app-github-universal-release*.apk
           if-no-files-found: error
           retention-days: 14
@@ -208,7 +209,7 @@ jobs:
       - name: Upload GitHub ARM64 APK
         uses: actions/upload-artifact@v7
         with:
-          name: flow-github-arm64-release-apk
+          name: plextube-github-arm64-release-apk
           path: app/build/outputs/apk/github/release/app-github-arm64-v8a-release*.apk
           if-no-files-found: error
           retention-days: 14
@@ -217,7 +218,7 @@ jobs:
       - name: Upload GitHub ARMv7 APK
         uses: actions/upload-artifact@v7
         with:
-          name: flow-github-armeabi-v7a-release-apk
+          name: plextube-github-armeabi-v7a-release-apk
           path: app/build/outputs/apk/github/release/app-github-armeabi-v7a-release*.apk
           if-no-files-found: error
           retention-days: 14
@@ -227,7 +228,7 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         uses: actions/upload-artifact@v7
         with:
-          name: flow-nightly-apk
+          name: plextube-nightly-apk
           path: |
             app/build/outputs/apk/github/nightly/app-github-universal-nightly.apk
             app/build/outputs/apk/github/nightly/app-github-universal-nightly.apk.sha256
@@ -237,7 +238,7 @@ jobs:
       - name: Upload FOSS universal APK
         uses: actions/upload-artifact@v7
         with:
-          name: flow-foss-universal-release-apk
+          name: plextube-foss-universal-release-apk
           path: app/build/outputs/apk/foss/release/app-foss-universal-release*.apk
           if-no-files-found: error
           retention-days: 14
@@ -246,7 +247,7 @@ jobs:
       - name: Upload FOSS ARM64 APK
         uses: actions/upload-artifact@v7
         with:
-          name: flow-foss-arm64-release-apk
+          name: plextube-foss-arm64-release-apk
           path: app/build/outputs/apk/foss/release/app-foss-arm64-v8a-release*.apk
           if-no-files-found: error
           retention-days: 14
@@ -255,7 +256,7 @@ jobs:
       - name: Upload FOSS ARMv7 APK
         uses: actions/upload-artifact@v7
         with:
-          name: flow-foss-armeabi-v7a-release-apk
+          name: plextube-foss-armeabi-v7a-release-apk
           path: app/build/outputs/apk/foss/release/app-foss-armeabi-v7a-release*.apk
           if-no-files-found: error
           retention-days: 14
@@ -277,28 +278,25 @@ jobs:
       - name: Download release APKs
         uses: actions/download-artifact@v8
         with:
-          pattern: flow-*-release-apk
+          pattern: plextube-*-release-apk
           path: dist/
           merge-multiple: true
 
-      # flow.apk and flow-foss.apk are the universal builds and are a public
-      # contract: IzzyOnDroid matches release assets by file name, and the
-      # README links to them directly. Do not rename or drop them without
-      # first updating the IzzyOnDroid entry for io.github.aedev.flow.
+      # The universal APK names are stable download links used by the README.
       - name: Rename APKs for release
         run: |
           set -euo pipefail
-          mv dist/app-github-universal-release.apk   dist/flow.apk
-          mv dist/app-foss-universal-release.apk     dist/flow-foss.apk
-          mv dist/app-github-arm64-v8a-release.apk   dist/flow-arm64-v8a.apk
-          mv dist/app-github-armeabi-v7a-release.apk dist/flow-armeabi-v7a.apk
-          mv dist/app-foss-arm64-v8a-release.apk     dist/flow-foss-arm64-v8a.apk
-          mv dist/app-foss-armeabi-v7a-release.apk   dist/flow-foss-armeabi-v7a.apk
+          mv dist/app-github-universal-release.apk   dist/plextube.apk
+          mv dist/app-foss-universal-release.apk     dist/plextube-foss.apk
+          mv dist/app-github-arm64-v8a-release.apk   dist/plextube-arm64-v8a.apk
+          mv dist/app-github-armeabi-v7a-release.apk dist/plextube-armeabi-v7a.apk
+          mv dist/app-foss-arm64-v8a-release.apk     dist/plextube-foss-arm64-v8a.apk
+          mv dist/app-foss-armeabi-v7a-release.apk   dist/plextube-foss-armeabi-v7a.apk
 
       - name: Generate checksums
         run: |
           cd dist
-          sha256sum flow*.apk > checksums.txt
+          sha256sum plextube*.apk > checksums.txt
           cat checksums.txt
 
       - name: Get version from tag
@@ -310,22 +308,22 @@ jobs:
           RELEASE_VERSION: ${{ steps.get_version.outputs.VERSION }}
         run: |
           test -s release-notes.md
-          grep -Fqx "# Flow ${RELEASE_VERSION}" release-notes.md
+          grep -Fqx "# Plextube ${RELEASE_VERSION}" release-notes.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.get_version.outputs.VERSION }}
-          name: Flow ${{ steps.get_version.outputs.VERSION }}
+          name: Plextube ${{ steps.get_version.outputs.VERSION }}
           body_path: release-notes.md
           generate_release_notes: false
           files: |
-            dist/flow.apk
-            dist/flow-foss.apk
-            dist/flow-arm64-v8a.apk
-            dist/flow-armeabi-v7a.apk
-            dist/flow-foss-arm64-v8a.apk
-            dist/flow-foss-armeabi-v7a.apk
+            dist/plextube.apk
+            dist/plextube-foss.apk
+            dist/plextube-arm64-v8a.apk
+            dist/plextube-armeabi-v7a.apk
+            dist/plextube-foss-arm64-v8a.apk
+            dist/plextube-foss-armeabi-v7a.apk
             dist/checksums.txt
           draft: false
           prerelease: false

@@ -115,17 +115,17 @@ It is not a finished product identity file; it is an app foundation you can adap
   <table border="0">
     <tr>
       <td align="center" style="vertical-align: middle; padding: 10px;">
-        <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/A-EDev/Flow/">
+        <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Abhidroid87/Plextube/">
           <img src="https://github.com/ImranR98/Obtainium/blob/main/assets/graphics/badge_obtainium.png" alt="Obtainium" height="60">
         </a>
       </td>
       <td align="center" style="vertical-align: middle; padding: 10px;">
-        <a href="https://github.com/A-EDev/Flow/releases/latest">
+        <a href="https://github.com/Abhidroid87/Plextube/releases/latest">
           <img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="GitHub" height="90">
         </a>
       </td>
       <td align="center" style="vertical-align: middle; padding: 10px;">
-        <a href="https://apt.izzysoft.de/packages/io.github.aedev.flow">
+        <a href="https://github.com/Abhidroid87/Plextube/releases/latest">
           <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="IzzyOnDroid" height="90">
         </a>
       </td>
@@ -137,11 +137,32 @@ It is not a finished product identity file; it is an app foundation you can adap
 > ⚠️ Nightly builds are unstable and may contain bugs. Use at your own risk.
 
 <div align="center">
-  <a href="https://nightly.link/A-EDev/Flow/workflows/build/main/flow-nightly-apk.zip">
+  <a href="https://nightly.link/Abhidroid87/Plextube/workflows/build/main/plextube-nightly-apk.zip">
     <img src="https://github.com/machiav3lli/oandbackupx/blob/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="Download from GitHub" height="75">
   </a>
   <p><b>No GitHub account required</b> — powered by <a href="https://nightly.link">nightly.link</a></p>
 </div>
+
+### Publishing a Release
+
+Releases are created automatically when a `v*` tag is pushed. For the first
+release, configure these repository secrets in GitHub Actions before tagging:
+
+- `RELEASE_KEYSTORE_BASE64`
+- `RELEASE_CERT_SHA256`
+- `STORE_PASSWORD`
+- `KEY_ALIAS`
+- `KEY_PASSWORD`
+
+Then publish the first release with:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The workflow builds the signed universal and ABI-specific APKs, generates
+`checksums.txt`, and attaches them to the Plextube GitHub Release.
 
 ### Requirements 
 **Minimum Requirement:** Android 8.0+
