@@ -71,10 +71,9 @@ jobs:
             echo "::error::RELEASE_KEYSTORE_BASE64 is unavailable for a tag build. Refusing to publish unsigned APKs."
             exit 1
           else
-            # Installed clients pin this value; an APK signed with anything else cannot
-            # be installed as an update. Set it to the SHA-256 certificate fingerprint
-            # for the keystore stored in RELEASE_KEYSTORE_BASE64.
-            EXPECTED_SIGNER_SHA256: ${{ secrets.RELEASE_CERT_SHA256 }}
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "Release keystore secret is not available. Continuing with an unsigned CI build."
+          fi
 
       - name: Run unit tests
         run: >
