@@ -25,7 +25,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.JsonParser
-import dagger.hilt.android.AndroidEntryPoint
 import com.plextube.app.BuildConfig
 import com.plextube.app.data.local.AppUiModePreferences
 import com.plextube.app.data.local.LocalDataManager
@@ -58,6 +57,7 @@ import com.plextube.app.utils.AppLanguageManager
 import com.plextube.app.utils.FlowCrashHandler
 import com.plextube.app.utils.UpdateInfo
 import com.plextube.app.utils.UpdateManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
