@@ -11,25 +11,31 @@ plugins {
     alias(libs.plugins.room)
 }
 
-val gitRemoteUrl = providers.exec {
-    commandLine("git", "config", "--get", "remote.origin.url")
-}.standardOutput.asText.getOrElse("").trim()
+val gitRemoteUrl =
+    providers
+        .exec {
+            commandLine("git", "config", "--get", "remote.origin.url")
+        }.standardOutput.asText
+        .getOrElse("")
+        .trim()
 
-val githubRepoFromGit = gitRemoteUrl
-    .removeSuffix(".git")
-    .let { url ->
-        val withoutProtocol = url
-            .replace(Regex("^https?://github\\.com/"), "")
-            .replace(Regex("^git@github\\.com:"), "")
-            .replace(Regex("^ssh://git@github\\.com/"), "")
-            .replace(Regex("^git@github\\.com/"), "")
-        val parts = withoutProtocol.split('/').filter { it.isNotBlank() }
-        if (parts.size >= 2) {
-            "${parts[0]}/${parts[1]}"
-        } else {
-            "owner/repo"
+val githubRepoFromGit =
+    gitRemoteUrl
+        .removeSuffix(".git")
+        .let { url ->
+            val withoutProtocol =
+                url
+                    .replace(Regex("^https?://github\\.com/"), "")
+                    .replace(Regex("^git@github\\.com:"), "")
+                    .replace(Regex("^ssh://git@github\\.com/"), "")
+                    .replace(Regex("^git@github\\.com/"), "")
+            val parts = withoutProtocol.split('/').filter { it.isNotBlank() }
+            if (parts.size >= 2) {
+                "${parts[0]}/${parts[1]}"
+            } else {
+                "owner/repo"
+            }
         }
-    }
 
 val githubOwner = githubRepoFromGit.substringBefore('/')
 val githubRepo = githubRepoFromGit.substringAfter('/').ifEmpty { "repo" }
