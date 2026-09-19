@@ -1,4 +1,4 @@
-package io.github.aedev.flow
+package io.github.abhidroid87.plextube
 
 import android.app.Application
 import android.content.ComponentCallbacks2
@@ -8,33 +8,33 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import dagger.hilt.android.HiltAndroidApp
-import io.github.aedev.flow.data.local.CONTENT_LANGUAGE_FOLLOW_APP
-import io.github.aedev.flow.data.local.PlayerPreferences
-import io.github.aedev.flow.data.local.SubscriptionRepository
-import io.github.aedev.flow.data.repository.NewPipeDownloader
-import io.github.aedev.flow.data.repository.YouTubeRepository
-import io.github.aedev.flow.discord.DiscordPresenceRuntime
-import io.github.aedev.flow.innertube.YouTube
-import io.github.aedev.flow.innertube.models.YouTubeLocale
-import io.github.aedev.flow.innertube.models.normalizeYouTubeHostLanguage
-import io.github.aedev.flow.innertube.pages.NewPipeExtractor
-import io.github.aedev.flow.network.AppProxyManager
-import io.github.aedev.flow.notification.NotificationHelper
-import io.github.aedev.flow.notification.SubscriptionCheckWorker
-import io.github.aedev.flow.utils.AppLanguageManager
-import io.github.aedev.flow.utils.FlowCrashHandler
-import io.github.aedev.flow.utils.PerformanceDispatcher
-import io.github.aedev.flow.utils.cipher.PipePipeNsigDecoder
-import io.github.aedev.flow.utils.newPipeContentCountry
-import io.github.aedev.flow.utils.newPipeLocalization
-import io.github.aedev.flow.utils.normalizeYouTubeCountry
-import io.github.aedev.flow.utils.potoken.NewPipePoTokenProvider
+import io.github.abhidroid87.plextube.data.local.CONTENT_LANGUAGE_FOLLOW_APP
+import io.github.abhidroid87.plextube.data.local.PlayerPreferences
+import io.github.abhidroid87.plextube.data.local.SubscriptionRepository
+import io.github.abhidroid87.plextube.data.repository.NewPipeDownloader
+import io.github.abhidroid87.plextube.data.repository.YouTubeRepository
+import io.github.abhidroid87.plextube.discord.DiscordPresenceRuntime
+import io.github.abhidroid87.plextube.innertube.YouTube
+import io.github.abhidroid87.plextube.innertube.models.YouTubeLocale
+import io.github.abhidroid87.plextube.innertube.models.normalizeYouTubeHostLanguage
+import io.github.abhidroid87.plextube.innertube.pages.NewPipeExtractor
+import io.github.abhidroid87.plextube.network.AppProxyManager
+import io.github.abhidroid87.plextube.notification.NotificationHelper
+import io.github.abhidroid87.plextube.notification.SubscriptionCheckWorker
+import io.github.abhidroid87.plextube.utils.AppLanguageManager
+import io.github.abhidroid87.plextube.utils.PlextubeCrashHandler
+import io.github.abhidroid87.plextube.utils.PerformanceDispatcher
+import io.github.abhidroid87.plextube.utils.cipher.PipePipeNsigDecoder
+import io.github.abhidroid87.plextube.utils.newPipeContentCountry
+import io.github.abhidroid87.plextube.utils.newPipeLocalization
+import io.github.abhidroid87.plextube.utils.normalizeYouTubeCountry
+import io.github.abhidroid87.plextube.utils.potoken.NewPipePoTokenProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.plextube.collectLatest
+import kotlinx.coroutines.plextube.combine
+import kotlinx.coroutines.plextube.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.OkHttpClient
@@ -47,7 +47,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 @HiltAndroidApp
-class FlowApplication :
+class PlextubeApplication :
     Application(),
     SingletonImageLoader.Factory {
     @Inject
@@ -57,12 +57,12 @@ class FlowApplication :
     lateinit var okHttpClient: OkHttpClient
 
     @Inject
-    lateinit var channelReelIndex: io.github.aedev.flow.data.shorts.ChannelReelIndex
+    lateinit var channelReelIndex: io.github.abhidroid87.plextube.data.shorts.ChannelReelIndex
 
     override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader
 
     companion object {
-        private const val TAG = "FlowApplication"
+        private const val TAG = "PlextubeApplication"
         private const val VISITOR_DATA_KEY = "visitor_data"
         private const val VISITOR_DATA_FETCHED_AT_KEY = "visitor_data_fetched_at"
         private const val VISITOR_DATA_MAX_AGE_MS = 7L * 24L * 60L * 60L * 1_000L
@@ -90,7 +90,7 @@ class FlowApplication :
         }
 
         // Install crash handler for real-time monitoring
-        FlowCrashHandler.install(this)
+        PlextubeCrashHandler.install(this)
 
         try {
             // Seeded from the device locale so the very first extraction is already localized; the
@@ -109,7 +109,7 @@ class FlowApplication :
         }
 
         try {
-            io.github.aedev.flow.utils.cipher.CipherDeobfuscator
+            io.github.abhidroid87.plextube.utils.cipher.CipherDeobfuscator
                 .initialize(this)
             Log.d(TAG, "CipherDeobfuscator initialized")
         } catch (e: Exception) {
@@ -136,14 +136,14 @@ class FlowApplication :
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             val savedIntervalMinutes = playerPreferences.subscriptionCheckIntervalMinutes.first()
             SubscriptionCheckWorker.schedulePeriodicCheck(
-                this@FlowApplication,
+                this@PlextubeApplication,
                 intervalMinutes = savedIntervalMinutes.toLong(),
             )
 
             // Schedule periodic update checks (every 12 hours) — github flavor only
             if (BuildConfig.UPDATER_ENABLED) {
-                io.github.aedev.flow.notification.UpdateCheckWorker
-                    .schedulePeriodicCheck(this@FlowApplication)
+                io.github.abhidroid87.plextube.notification.UpdateCheckWorker
+                    .schedulePeriodicCheck(this@PlextubeApplication)
             }
         }
 
@@ -169,7 +169,7 @@ class FlowApplication :
 
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
-                val prefs = getSharedPreferences("flow_prefs", MODE_PRIVATE)
+                val prefs = getSharedPreferences("plextube_prefs", MODE_PRIVATE)
                 val cached = prefs.getString(VISITOR_DATA_KEY, null)
                 val cachedAt = prefs.getLong(VISITOR_DATA_FETCHED_AT_KEY, 0L)
                 val cacheIsFresh =
@@ -199,7 +199,7 @@ class FlowApplication :
                 Log.w(TAG, "visitorData init error: ${e.message}")
             }
             try {
-                io.github.aedev.flow.utils.potoken.WebPoTokenSession
+                io.github.abhidroid87.plextube.utils.potoken.WebPoTokenSession
                     .prewarm()
             } catch (e: Exception) {
                 Log.w(TAG, "WebPoTokenSession prewarm failed: ${e.message}")
@@ -229,7 +229,7 @@ class FlowApplication :
             playerPreferences.trendingRegion.collectLatest { region ->
                 if (lastRegion != null && lastRegion != region) {
                     Log.d(TAG, "Trending region changed from $lastRegion to $region. Invalidate visitor data.")
-                    val prefs = getSharedPreferences("flow_prefs", MODE_PRIVATE)
+                    val prefs = getSharedPreferences("plextube_prefs", MODE_PRIVATE)
                     prefs
                         .edit()
                         .remove(VISITOR_DATA_KEY)
@@ -259,7 +259,7 @@ class FlowApplication :
 
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
             try {
-                val repository = SubscriptionRepository.getInstance(this@FlowApplication)
+                val repository = SubscriptionRepository.getInstance(this@PlextubeApplication)
                 val youtubeRepository = YouTubeRepository.getInstance(playerPreferences, channelReelIndex)
                 val repaired =
                     repository.repairVideoThumbnailSubscriptions { channelId ->
@@ -276,7 +276,7 @@ class FlowApplication :
         }
     }
 
-    private fun applyProxyConfig(config: io.github.aedev.flow.network.AppProxyConfig) {
+    private fun applyProxyConfig(config: io.github.abhidroid87.plextube.network.AppProxyConfig) {
         AppProxyManager.update(config)
         YouTube.proxy = AppProxyManager.currentProxy()
         YouTube.proxyAuth = AppProxyManager.currentHttpProxyAuthorizationHeader()
@@ -292,14 +292,14 @@ class FlowApplication :
 
     override fun onLowMemory() {
         super.onLowMemory()
-        FlowCrashHandler.recordPhase("memory", "FlowApplication.onLowMemory")
+        PlextubeCrashHandler.recordPhase("memory", "PlexTubeApplication.onLowMemory")
         releaseVolatileMemory()
     }
 
     @Suppress("DEPRECATION")
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        FlowCrashHandler.recordPhase("memory", "FlowApplication.onTrimMemory level=$level")
+        PlextubeCrashHandler.recordPhase("memory", "PlexTubeApplication.onTrimMemory level=$level")
         if (level >= ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
             releaseVolatileMemory()
         }

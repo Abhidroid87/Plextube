@@ -1,16 +1,16 @@
-package io.github.aedev.flow.data.local.dao
+package io.github.abhidroid87.plextube.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import io.github.aedev.flow.data.local.entity.NoteEntity
-import kotlinx.coroutines.flow.Flow
+import io.github.abhidroid87.plextube.data.local.entity.NoteEntity
+import kotlinx.coroutines.plextube.Plextube
 
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM notes WHERE id = :id LIMIT 1")
-    fun observe(id: String): Flow<NoteEntity?>
+    fun observe(id: String): Plextube<NoteEntity?>
 
     @Query("SELECT * FROM notes ORDER BY updatedAt DESC")
     suspend fun getAll(): List<NoteEntity>
