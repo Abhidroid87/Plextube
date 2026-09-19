@@ -11,52 +11,18 @@ plugins {
     alias(libs.plugins.room)
 }
 
-val gitRemoteUrl =
-    providers
-        .exec {
-            commandLine("git", "config", "--get", "remote.origin.url")
-        }.standardOutput.asText
-        .getOrElse("")
-        .trim()
-
-val githubRepoFromGit =
-    gitRemoteUrl
-        .removeSuffix(".git")
-        .let { url ->
-            val withoutProtocol =
-                url
-                    .replace(Regex("^https?://github\\.com/"), "")
-                    .replace(Regex("^git@github\\.com:"), "")
-                    .replace(Regex("^ssh://git@github\\.com/"), "")
-                    .replace(Regex("^git@github\\.com/"), "")
-            val parts = withoutProtocol.split('/').filter { it.isNotBlank() }
-            if (parts.size >= 2) {
-                "${parts[0]}/${parts[1]}"
-            } else {
-                "owner/repo"
-            }
-        }
-
-val githubOwner = githubRepoFromGit.substringBefore('/')
-val githubRepo = githubRepoFromGit.substringAfter('/').ifEmpty { "repo" }
-
 android {
-    namespace = "com.plextube.app"
+    namespace = "io.github.abhidroid87.plextube"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.plextube.app"
+        applicationId = "io.github.abhidroid87.plextube"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 18
+        versionName = "2.2.1"
 
-        buildConfigField("String", "GITHUB_REPO", "\"$githubRepoFromGit\"")
-        buildConfigField("String", "GITHUB_REPO_URL", "\"https://github.com/$githubRepoFromGit\"")
-        buildConfigField("String", "GITHUB_RELEASES_URL", "\"https://github.com/$githubRepoFromGit/releases\"")
-        buildConfigField("String", "GITHUB_OWNER_URL", "\"https://github.com/$githubOwner\"")
-
-        testInstrumentationRunner = "com.plextube.app.HiltTestRunner"
+        testInstrumentationRunner = "io.github.abhidroid87.plextube.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -89,7 +55,7 @@ android {
             dimension = "version"
             isDefault = true
             buildConfigField("Boolean", "UPDATER_ENABLED", "true")
-            buildConfigField("String", "DISCORD_APPLICATION_ID", "\"1526515771021328514\"")
+            buildConfigField("String", "DISCORD_APPLICATION_ID", "\"\"")
         }
         create("foss") {
             dimension = "version"
@@ -281,7 +247,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.encoding)
 
-    // --- Device Sync (FLOW-SYNC/1) ---
+    // --- Device Sync (Plextube-SYNC/1) ---
     implementation(libs.ktor.server.core) {
         exclude(group = "org.fusesource.jansi", module = "jansi")
     }
